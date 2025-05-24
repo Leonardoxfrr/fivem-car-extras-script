@@ -1,18 +1,35 @@
-
 local isMenuOpen = false
 
-Citizen.CreateThread(function()
-    while ESX == nil do
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(10)
+-- ESX-Initialisierung für Legacy und Classic
+local ESX = nil
+
+if pcall(function() return exports['es_extended'] end) then
+    ESX = exports['es_extended']:getSharedObject()
+else
+    Citizen.CreateThread(function()
+        while ESX == nil do
+            TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+            Citizen.Wait(10)
+        end
+    end)
+end
+
+-- Hilfsfunktion für ESX-Notifications (kompatibel mit allen Versionen)
+local function ShowESXNotification(msg)
+    if ESX and ESX.ShowNotification then
+        ESX.ShowNotification(msg)
+    else
+        SetNotificationTextEntry('STRING')
+        AddTextComponentString(msg)
+        DrawNotification(false, false)
     end
-end)
+end
 
 function OpenExtrasMenu()
     local playerPed = PlayerPedId()
     local vehicle = GetVehiclePedIsIn(playerPed, false)
     if vehicle == 0 or GetPedInVehicleSeat(vehicle, -1) ~= playerPed then
-        ESX.ShowNotification('Du musst Fahrer eines Fahrzeugs sein!')
+        ShowESXNotification('Du musst Fahrer eines Fahrzeugs sein!')
         return
     end
 
@@ -25,7 +42,7 @@ function OpenExtrasMenu()
     end
 
     if #elements == 0 then
-        ESX.ShowNotification('Dieses Fahrzeug hat keine Extras!')
+        ShowESXNotification('Dieses Fahrzeug hat keine Extras!')
         return
     end
 
@@ -55,7 +72,7 @@ function OpenExtrasMenu()
         for i=0,7 do tyres[i]=IsVehicleTyreBurst(vehicle,i,false) end
 
         SetVehicleExtra(vehicle, extra.value, newState and 0 or 1)
-        ESX.ShowNotification('Extra '..extra.value..(newState and ' aktiviert' or ' deaktiviert'))
+        ShowESXNotification('Extra '..extra.value..(newState and ' aktiviert' or ' deaktiviert'))
         -- Stelle Fahrzeugzustand wieder her
         SetVehicleEngineHealth(vehicle, engineHealth)
         SetVehicleBodyHealth(vehicle, bodyHealth)
