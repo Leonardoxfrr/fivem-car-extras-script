@@ -25,6 +25,8 @@ local function ShowESXNotification(msg)
     end
 end
 
+local _menuPool = NativeUI.CreatePool()
+
 function OpenExtrasMenu()
     local playerPed = PlayerPedId()
     local vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -47,7 +49,6 @@ function OpenExtrasMenu()
     end
 
     menu = NativeUI.CreateMenu('Fahrzeug Extras', 'Extras auswählen')
-    _menuPool = NativeUI.CreatePool()
     _menuPool:Add(menu)
 
     for _, extra in ipairs(elements) do
@@ -83,17 +84,18 @@ function OpenExtrasMenu()
         for i=0,7 do if tyres[i] then SetVehicleTyreBurst(vehicle,i,true,1000.0) end end
         menu:Visible(false)
         isMenuOpen = false
+        _menuPool:Remove(menu)
     end
 
     menu:Visible(true)
     isMenuOpen = true
-
     Citizen.CreateThread(function()
         while isMenuOpen do
             Citizen.Wait(0)
             _menuPool:ProcessMenus()
             if not menu:Visible() then
                 isMenuOpen = false
+                _menuPool:Remove(menu)
             end
         end
     end)
