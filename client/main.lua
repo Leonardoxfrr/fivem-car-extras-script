@@ -89,10 +89,16 @@ function OpenExtrasMenu()
 
     menu:Visible(true)
     isMenuOpen = true
+    -- Kamera-Eingaben blockieren solange Menü offen
     Citizen.CreateThread(function()
         while isMenuOpen do
             Citizen.Wait(0)
             _menuPool:ProcessMenus()
+            -- Blockiere Kamera-Steuerung (Rechtsstick, Maus)
+            DisableControlAction(0, 1, true)  -- LookLeftRight
+            DisableControlAction(0, 2, true)  -- LookUpDown
+            DisableControlAction(0, 25, true) -- Aim
+            DisableControlAction(0, 24, true) -- Attack
             if not menu:Visible() then
                 isMenuOpen = false
                 _menuPool:Remove(menu)
