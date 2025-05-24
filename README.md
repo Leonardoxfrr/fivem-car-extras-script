@@ -27,3 +27,11 @@ This script allows you to edit your vehicle's extras in-game using the F11 key. 
 
 ## Support
 If you have any issues or questions, feel free to ask in the forum or on Discord.
+
+
+
+
+
+
+
+NICHT FERTIG
