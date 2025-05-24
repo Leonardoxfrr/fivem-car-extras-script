@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-author 'Dein Name'
+author 'Leonardoxfrr'
 description 'Fahrzeug-Extras Menü über NativeUI (F11) für ESX'
 version '1.0.0'
 

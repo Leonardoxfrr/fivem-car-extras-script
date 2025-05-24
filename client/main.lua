@@ -1,5 +1,4 @@
-ESX = nil
-local menu = nil
+
 local isMenuOpen = false
 
 Citizen.CreateThread(function()
