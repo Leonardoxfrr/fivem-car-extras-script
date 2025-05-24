@@ -82,23 +82,20 @@ function OpenExtrasMenu()
         for i=0,7 do if not windows[i] then SmashVehicleWindow(vehicle,i) end end
         for i=0,5 do if doors[i]>0 then SetVehicleDoorBroken(vehicle,i,true) end end
         for i=0,7 do if tyres[i] then SetVehicleTyreBurst(vehicle,i,true,1000.0) end end
-        menu:Visible(false)
-        isMenuOpen = false
-        _menuPool:Remove(menu)
+        -- Menü bleibt offen, Option wird aktualisiert
+        item:RightLabel(newState and '✓' or '✗')
+        elements[index].enabled = newState
     end
 
     menu:Visible(true)
     isMenuOpen = true
-    -- Kamera-Eingaben blockieren solange Menü offen
+    -- Nur horizontale Kamerabewegung blockieren, vertikale bleibt erlaubt
     Citizen.CreateThread(function()
         while isMenuOpen do
             Citizen.Wait(0)
             _menuPool:ProcessMenus()
-            -- Blockiere Kamera-Steuerung (Rechtsstick, Maus)
-            DisableControlAction(0, 1, true)  -- LookLeftRight
-            DisableControlAction(0, 2, true)  -- LookUpDown
-            DisableControlAction(0, 25, true) -- Aim
-            DisableControlAction(0, 24, true) -- Attack
+            DisableControlAction(0, 1, true)  -- LookLeftRight (blockiert horizontale Mausbewegung)
+            -- Vertikale Bewegung (2) bleibt erlaubt
             if not menu:Visible() then
                 isMenuOpen = false
                 _menuPool:Remove(menu)
