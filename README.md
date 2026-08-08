@@ -1,37 +1,47 @@
-# FiveM Car Extras Menu (ESX, NativeUI)
+# FiveM Car Extras
 
-This script allows you to edit your vehicle's extras in-game using the F11 key. The menu is based on NativeUI and designed for the ESX framework.
+Kleine ESX-Ressource zum Ein- und Ausschalten von Fahrzeug-Extras über ein NativeUI-Menü. Das Menü steht nur dem Fahrer des aktuellen Fahrzeugs zur Verfügung.
 
-## Features
-- Open the extras menu with F11 while inside a vehicle
-- Enable or disable vehicle extras easily via a menu
-- NativeUI integration for a user-friendly interface
-- ESX compatible
+## Funktionen
+
+- Öffnen des Menüs mit `F11` (`Config.OpenKey = 344`)
+- Erkennung der Extras `0` bis `20` am aktuellen Fahrzeug
+- Umschalten vorhandener Extras über NativeUI
+- Beschränkung auf den Fahrersitz
+
+Die Änderungen werden ausschließlich clientseitig am aktuellen Fahrzeug gesetzt. Es gibt keine Datenbank und keine dauerhafte Speicherung nach Respawn oder Neustart.
+
+## Voraussetzungen
+
+- FiveM/FXServer
+- ESX
+- NativeUI als gestartete Ressource
 
 ## Installation
-1. Place the script in your `resources` folder (e.g. `resources/[local]/fivem-car-extras`)
-2. Make sure you have [NativeUI](https://github.com/FrazzIe/NativeUILua) installed
-3. Add the script to your `server.cfg`:
-   ```
-   ensure fivem-car-extras
-   ```
-4. Restart your server
 
-## Configuration
-- Adjust `config.lua` to your preferences (e.g. key binding)
+1. Repository als Ordner `fivem-car-extras-script` in `resources` ablegen.
+2. Prüfen, ob die in `fxmanifest.lua` referenzierten ESX- und NativeUI-Dateien zu den installierten Versionen passen.
+3. Ressourcen in der richtigen Reihenfolge starten:
 
-## Usage
-- Enter a vehicle
-- Press F11 to open the extras menu
-- Select the desired extras
+```cfg
+ensure es_extended
+ensure NativeUI
+ensure fivem-car-extras-script
+```
 
-## Support
-If you have any issues or questions, feel free to ask in the forum or on Discord.
+4. Als Fahrer in ein Fahrzeug mit konfigurierten Extras einsteigen und `F11` drücken.
 
+## Konfiguration
 
+Der Öffnungsknopf wird in `config.lua` als FiveM-Control-ID definiert. Für andere Tasten muss die entsprechende Control-ID eingetragen werden.
 
+## Technische Hinweise
 
+- Extras werden mit den GTA/FiveM-Natives für `DoesExtraExist` und `SetVehicleExtra` verarbeitet.
+- Der vorhandene Serverteil enthält aktuell keine Geschäftslogik.
+- Netzwerkverhalten und Besitzrechte des Fahrzeugs werden nicht serverseitig geprüft.
+- Für dauerhafte Zustände wäre eine serverseitig validierte Speicherung pro Fahrzeugkennzeichen erforderlich.
 
+## Status
 
-
-NICHT FERTIG
+Die Kernfunktion ist klein, der Bestand sollte aber vor produktiver Nutzung mit der konkreten ESX- und NativeUI-Version getestet werden. Insbesondere sind Synchronisierung, Berechtigungen und Persistenz nicht Bestandteil dieses Projekts.
